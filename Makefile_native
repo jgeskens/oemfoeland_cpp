@@ -1,0 +1,21 @@
+CXX=g++
+LD=g++
+CFLAGS=-g -I/Library/Frameworks/SDL.framework/Headers -I/System/Library/Frameworks/OpenGL.framework/Headers -I/Library/Frameworks/SDL_image.framework/Headers
+LIBS=-framework SDL -framework Cocoa -framework OpenGL -framework SDL_image
+CPP_FILES=$(wildcard *.cpp)
+OBJ_FILES=$(patsubst %.cpp,%.o,$(CPP_FILES))
+
+%.o: %.cpp
+	$(CXX) -c -o $@ $< $(CFLAGS)
+
+oemfoeland: $(OBJ_FILES) SDLMain.o
+	$(LD) -o $@ $^ $(CFLAGS) $(LIBS)
+
+SDLMain.o: SDLMain.m
+	$(CXX) -c -o SDLMain.o SDLMain.m $(CFLAGS)
+
+
+.PHONY: clean
+
+clean:
+	@rm *.o; rm oemfoeland

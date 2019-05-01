@@ -1,0 +1,17 @@
+CXX=/Users/jef/emsdk_portable/emscripten/1.16.0/em++
+LD=/Users/jef/emsdk_portable/emscripten/1.16.0/em++
+CFLAGS= -s TOTAL_MEMORY=67108864 -s ALLOW_MEMORY_GROWTH=1 -DEMSCRIPTEN -s LEGACY_GL_EMULATION=1 --preload-file terrain.png
+LIBS=-lSDL -lSDLmain -lSDL_mixer -lSDL_image
+CPP_FILES=$(wildcard *.cpp)
+OBJ_FILES=$(patsubst %.cpp,%.o,$(CPP_FILES))
+
+%.o: %.cpp
+	$(CXX) -c -o $@ $< $(CFLAGS)
+
+oemfoeland.html: $(OBJ_FILES)
+	$(LD) -o $@ $^ $(CFLAGS) $(LIBS)
+
+.PHONY: clean
+
+clean:
+	@rm *.o; rm oemfoeland.html
